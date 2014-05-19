@@ -2,6 +2,7 @@
   "name": "agreco-mashape-todo",
   "version": "0.0.1",
   "private": true,
+  "author": "Austin Greco",
   "dependencies": {
     "express": "*",
     "jade": "*",
@@ -9,10 +10,12 @@
     "body-parser": "*",
     "compression": "^1.0.2"
   },
-  "scripts": {},
   "devDependencies": {
     "mocha": "^1.19.0",
     "supertest": "^0.12.1",
     "should": "^3.3.1"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
   }
 }

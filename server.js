@@ -17,6 +17,19 @@ var config = {
   PORT: 3000
 };
 
+function isValidId(id) {
+  return id && id.match(/^[a-f0-9]{10}$/);
+}
+
+function validateId(id) {
+  if (!isValidId(id)) {
+    throw {
+      status: 400,
+      message: 'id is invalid'
+    };
+  }
+}
+
 /**
  * Express config
  */
@@ -35,59 +48,67 @@ app.use(jade_browser('/public/templates.js', '**', {
 }));
 
 /**
- * Routes
+ * Todo Routes
  */
 app.get('/todos', function(req, res) {
   res.json(todoapp.getAllTodos());
 });
 
 app.get('/todos/:todoid', function(req, res) {
-  if (!req.params.todoid.match(/^[a-f0-9]{10}$/)) {
-    throw {
-      status: 400,
-      message: 'id is invalid'
-    };
-  }
+  validateId(req.params.todoid);
 
   var todo = todoapp.getTodo(req.params.todoid);
 
-  if (!todo.todoid) {
-    res.json(404, {error: 'not found'});
-    return;
+  if (!todo) {
+    throw {
+      status: 404,
+      message: 'Todo not found'
+    };
   }
+
   res.json(todo);
 });
 
-
 app.post('/todos', function(req, res) {
   var todo = todoapp.createTodo();
-  res.setHeader('Location', '/todos/' + todo.todoid);
+  res.setHeader('Location', req.path + '/' + todo.todoid);
   res.json(201, todo);
 });
 
-app.post('/todos/:todoid/tasks', function(req, res) {
-  var taskid = crypto.randomBytes(5).toString('hex');
-  var output = {
-    taskid: taskid
-  };
-//  todos.push(output);
-  res.setHeader('Location', '/todos/' + req.params.todoid + '/tasks/' + taskid);
-  res.json(201, output);
-});
-
-
-app.put('/todos/:taskid', function(req, res) {
-  // update todo
-});
-
 app.delete('/todos/:todoid', function(req, res) {
-  if (!req.params.todoid.match(/^[a-f0-9]{10}$/)) {
-    res.json(400, {error: 'todoid is invalid'});
-    return;
-  }
-  res.json({});
+  validateId(req.params.todoid);
+
+  todoapp.deleteTodo(req.params.todoid);
+  res.send(204);
 });
 
+
+/**
+ * Task Routes
+ */
+app.post('/todos/:todoid/tasks', function(req, res) {
+  validateId(req.params.todoid);
+
+  var task = todoapp.createTask(req.params.todoid, req.body.text);
+  res.setHeader('Location', req.path + task.taskid);
+  res.json(201, task);
+});
+
+app.post('/todos/:todoid/tasks/:taskid', function(req, res) {
+  validateId(req.params.todoid);
+
+  var task = todoapp.createTask(req.params.todoid, req.body.text);
+  res.setHeader('Location', req.path + task.taskid);
+  res.json(201, task);
+});
+
+app.delete('/todos/:todoid/tasks/:taskid', function(req, res) {
+  validateId(req.params.todoid);
+  validateId(req.params.taskid);
+
+  todoapp.deleteTask(req.params.todoid, req.params.taskid);
+  res.send(204);
+});
 
 /**
  * Error handling

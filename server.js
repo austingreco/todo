@@ -1,4 +1,3 @@
-
 /**
  * Module Dependencies
  */
@@ -10,6 +9,7 @@ var compress = require('compression');
 var crypto = require('crypto');
 var todoapp = require('./todoapp')();
 
+
 /**
  * Config vars
  */
@@ -17,18 +17,6 @@ var config = {
   PORT: 3000
 };
 
-function isValidId(id) {
-  return id && id.match(/^[a-f0-9]{10}$/);
-}
-
-function validateId(id) {
-  if (!isValidId(id)) {
-    throw {
-      status: 400,
-      message: 'id is invalid'
-    };
-  }
-}
 
 /**
  * Express config
@@ -46,6 +34,29 @@ app.use(jade_browser('/public/templates.js', '**', {
   maxAge: 1,
   root: __dirname + '/views'
 }));
+
+
+/**
+ * Validation
+ */
+function validateId(id) {
+  if (!todoapp.isValidId(id)) {
+    throw {
+      status: 400,
+      message: 'id is invalid'
+    };
+  }
+}
+
+function validateText(text) {
+  if (text.length > 60) {
+    throw {
+      status: 400,
+      message: 'text is invalid'
+    };
+  }
+}
+
 
 /**
  * Todo Routes
@@ -94,12 +105,29 @@ app.post('/todos/:todoid/tasks', function(req, res) {
   res.json(201, task);
 });
 
+// Using POST for partial update here. PUT should be a full update; keeping it simple so no JSON PATCH diff.
 app.post('/todos/:todoid/tasks/:taskid', function(req, res) {
   validateId(req.params.todoid);
+  validateId(req.params.taskid);
 
-  var task = todoapp.createTask(req.params.todoid, req.body.text);
-  res.setHeader('Location', req.path + task.taskid);
-  res.json(201, task);
+  var task;
+
+  if (req.body.text) {
+    validateText(req.body.text);
+    task = todoapp.updateTaskText(req.params.todoid, req.params.taskid, req.body.text);
+  }
+
+  if (req.body.complete !== undefined) {
+    task = todoapp.updateTaskComplete(req.params.todoid, req.params.taskid, !!req.body.complete);
+  }
+
+  if (!task) {
+    throw {
+      status: 404,
+      message: 'Task not found'
+    };
+  }
+  res.json(task);
 });
 
 app.delete('/todos/:todoid/tasks/:taskid', function(req, res) {
@@ -109,6 +137,7 @@ app.delete('/todos/:todoid/tasks/:taskid', function(req, res) {
   todoapp.deleteTask(req.params.todoid, req.params.taskid);
   res.send(204);
 });
+
 
 /**
  * Error handling
@@ -120,6 +149,7 @@ app.use(function(err, req, res, next) {
     message: msg
   });
 });
+
 
 /**
  * Init server

@@ -3,15 +3,15 @@ var crypto = require('crypto');
 var TodoApp = function() {
   var todoList = [
     {
-      todoid: 'ffffffffff',
+      todoid: 'ffffffff',
       tasks: [
         {
-          taskid: 'fffffffffe',
+          taskid: 'fffffffe',
           complete: false,
           text: 'Make a test todo list'
         },
         {
-          taskid: 'fffffffffd',
+          taskid: 'fffffffd',
           complete: true,
           text: 'Make a sandwich'
         }
@@ -25,11 +25,20 @@ var TodoApp = function() {
    * @return {String}
    */
   function generateId() {
-    return crypto.randomBytes(5).toString('hex');
+    return crypto.randomBytes(4).toString('hex');
   }
 
   var todoapp = {
-    /**
+     /**
+     * Check whether string is a valid id or not
+     *
+     * @return {Boolean}
+     */
+    isValidId: function(id) {
+      return id && id.match(/^[a-f0-9]{8}$/)
+    },
+
+     /**
      * Get a todo by it's id
      *
      * @return {Object}
@@ -50,7 +59,10 @@ var TodoApp = function() {
      *
      * @return {Object}
      */
-    getAllTodos: function() {
+    getAllTodos: function(searchText) {
+      if (searchText) {
+
+      }
       return {
         todos: todoList.map(function(o) { return o.todoid; })
       };
@@ -69,6 +81,26 @@ var TodoApp = function() {
       todoList.push(output);
       return output;
     },
+
+     /**
+     * Delete a task, returns false if not found
+     *
+     * @return {Boolean}
+     */
+    deleteTodo: function(todoid) {
+      //todoList = todoList.filter(function(o) { o.todoid !== todoid });
+      var index = -1;
+      for (var i=0 ; i<todoList.length ; i++) {
+        if (todoList[i] === todoid) {
+          index = i;
+        }
+      }
+      if (index >= 0) {
+        todoList.splice(i, 1);
+      }
+      return index >= 0;
+    },
+
 
     /**
      * Create a new task with a unique id
@@ -90,6 +122,27 @@ var TodoApp = function() {
     },
 
     /**
+     * Create a new task with a unique id
+     *
+     * @return {Object}
+     */
+    deleteTask: function(todoid, taskid, text) {
+      var todo = todoapp.getTodo(todoid);
+      if (todo) {
+        var index = -1;
+        for (var i=0 ; i<todo.tasks.length ; i++) {
+          if (todo.tasks[i] === taskid) {
+            index = i;
+          }
+        }
+        if (index >= 0) {
+          todo.tasks.splice(i, 1);
+        }
+        return index >= 0;
+      }
+    },
+
+    /**
      * Update the tasks' text
      *
      * @return {Object}
@@ -102,29 +155,29 @@ var TodoApp = function() {
         });
         if (task.length === 1) {
           task[0].text = text;
-          return task;
+          return task[0];
         }
       }
     },
 
     /**
-     * Delete a task, returns false if not found
+     * Update the tasks' completed status
      *
-     * @return {Boolean}
+     * @return {Object}
      */
-    deleteTodo: function(todoid) {
-      //todoList = todoList.filter(function(o) { o.todoid !== todoid });
-      var index = -1;
-      for (var i=0 ; i<todoList.length ; i++) {
-        if (todoList[i] === todoid) {
-          index = i;
+    updateTaskComplete: function(todoid, taskid, complete) {
+      var todo = todoapp.getTodo(todoid);
+      if (todo) {
+        var task = todo.tasks.filter(function(o) {
+          return o.taskid === taskid;
+        });
+        if (task.length === 1) {
+          task[0].complete = complete;
+          return task[0];
         }
       }
-      if (index >= 0) {
-        todoList.splice(i, 1);
-      }
-      return index >= 0;
     }
+
   };
 
   return todoapp;

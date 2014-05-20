@@ -3,12 +3,10 @@ var todoapp = require('../todoapp')();
 
 describe('Todo App', function() {
 
-  before(function(done) {
-    done();
-  });
-
   describe('Todos', function() {
     var todoid;
+    var taskid;
+
     it('should create a todo', function() {
       var todo = todoapp.createTodo();
       todo.should.have.property('todoid');

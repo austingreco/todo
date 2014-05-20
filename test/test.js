@@ -14,8 +14,9 @@ describe('Todo App', function() {
     it('should create a new todo', function(done) {
       request
       .post('/todos')
+      .expect(201)
+      .expect('Location', /todos/)
       .end(function(err, res) {
-        res.should.have.status(201);
         res.body.should.have.property('todoid');
         todoid = res.body.todoid;
         done();
@@ -25,8 +26,9 @@ describe('Todo App', function() {
     it('should create a new task', function(done) {
       request
       .post('/todos/' + todoid + '/tasks')
+      .expect(201)
+      .expect('Location', /tasks/)
       .end(function(err, res) {
-        res.should.have.status(201);
         res.body.should.have.property('taskid');
         taskid = res.body.taskid;
         done();
@@ -37,9 +39,19 @@ describe('Todo App', function() {
       request
       .post('/todos/' + todoid + '/tasks/' + taskid)
       .send({text: 'updated text'})
+      .expect(200)
       .end(function(err, res) {
-        res.should.have.status(200);
         res.body.should.have.property('text', 'updated text');
+        done();
+      });
+    });
+
+    it('should not allow text which is too long', function(done) {
+      request
+      .post('/todos/' + todoid + '/tasks/' + taskid)
+      .send({text: 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'})
+      .expect(400)
+      .end(function(err, res) {
         done();
       });
     });
@@ -48,9 +60,31 @@ describe('Todo App', function() {
       request
       .post('/todos/' + todoid + '/tasks/' + taskid)
       .send({complete: true})
+      .expect(200)
       .end(function(err, res) {
-        res.should.have.status(200);
         res.body.should.have.property('complete', true);
+        done();
+      });
+    });
+
+    it('should mark a task complete with truthy values', function(done) {
+      request
+      .post('/todos/' + todoid + '/tasks/' + taskid)
+      .send({complete: 7})
+      .expect(200)
+      .end(function(err, res) {
+        res.body.should.have.property('complete', true);
+        done();
+      });
+    });
+
+    it('should mark a task not complete', function(done) {
+      request
+      .post('/todos/' + todoid + '/tasks/' + taskid)
+      .send({complete: false})
+      .expect(200)
+      .end(function(err, res) {
+        res.body.should.have.property('complete', false);
         done();
       });
     });
@@ -58,8 +92,8 @@ describe('Todo App', function() {
     it('should delete a task', function(done) {
       request
       .delete('/todos/' + todoid + '/tasks/' + taskid)
+      .expect(204)
       .end(function(err, res) {
-        res.should.have.status(204);
         done();
       });
     });
@@ -68,8 +102,17 @@ describe('Todo App', function() {
       request
       .post('/todos/' + todoid + '/tasks/' + taskid)
       .send({completed: true})
+      .expect(404)
       .end(function(err, res) {
-        res.should.have.status(404);
+        done();
+      });
+    });
+
+    it('should fail delete an invalid task', function(done) {
+      request
+      .delete('/todos/' + todoid + '/tasks/abc')
+      .expect(404)
+      .end(function(err, res) {
         done();
       });
     });
@@ -77,8 +120,17 @@ describe('Todo App', function() {
     it('should delete a todo', function(done) {
       request
       .delete('/todos/' + todoid)
+      .expect(204)
       .end(function(err, res) {
-        res.should.have.status(204);
+        done();
+      });
+    });
+
+    it('should fail to delete an invalid todo', function(done) {
+      request
+      .delete('/todos/abc')
+      .expect(404)
+      .end(function(err, res) {
         done();
       });
     });

@@ -83,7 +83,7 @@ var TodoApp = function() {
     },
 
      /**
-     * Delete a task, returns false if not found
+     * Delete a task, returns true if deleted
      *
      * @return {Boolean}
      */
@@ -122,9 +122,9 @@ var TodoApp = function() {
     },
 
     /**
-     * Create a new task with a unique id
+     * Delete a task by id, returns true if deleted
      *
-     * @return {Object}
+     * @return {Boolean}
      */
     deleteTask: function(todoid, taskid) {
       var todo = todoapp.getTodo(todoid);

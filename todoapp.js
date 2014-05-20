@@ -91,12 +91,12 @@ var TodoApp = function() {
       //todoList = todoList.filter(function(o) { o.todoid !== todoid });
       var index = -1;
       for (var i=0 ; i<todoList.length ; i++) {
-        if (todoList[i] === todoid) {
+        if (todoList[i].todoid === todoid) {
           index = i;
         }
       }
       if (index >= 0) {
-        todoList.splice(i, 1);
+        todoList.splice(index, 1);
       }
       return index >= 0;
     },
@@ -126,17 +126,17 @@ var TodoApp = function() {
      *
      * @return {Object}
      */
-    deleteTask: function(todoid, taskid, text) {
+    deleteTask: function(todoid, taskid) {
       var todo = todoapp.getTodo(todoid);
       if (todo) {
         var index = -1;
         for (var i=0 ; i<todo.tasks.length ; i++) {
-          if (todo.tasks[i] === taskid) {
+          if (todo.tasks[i].taskid === taskid) {
             index = i;
           }
         }
         if (index >= 0) {
-          todo.tasks.splice(i, 1);
+          todo.tasks.splice(index, 1);
         }
         return index >= 0;
       }

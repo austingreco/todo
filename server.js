@@ -62,7 +62,13 @@ function validateText(text) {
  * Todo Routes
  */
 app.get('/todos', function(req, res) {
-  res.json(todoapp.getAllTodos());
+  var todos;
+  if (req.query.search) {
+    todos = todoapp.searchTodos(req.query.search);
+  } else {
+    todos = todoapp.getAllTodos();
+  }
+  res.json(todos);
 });
 
 app.get('/todos/:todoid', function(req, res) {
@@ -138,6 +144,9 @@ app.delete('/todos/:todoid/tasks/:taskid', function(req, res) {
   res.send(204);
 });
 
+app.get('/*', function(req, res) {
+  res.render('index');
+});
 
 /**
  * Error handling

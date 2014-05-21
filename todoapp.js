@@ -69,6 +69,29 @@ var TodoApp = function() {
     },
 
     /**
+     * Search todos for text in tasks
+     *
+     * @return {Object}
+     */
+    searchTodos: function(searchText) {
+      if (!searchText) {
+        return;
+      }
+      var regex = new RegExp(searchText, 'i');
+      return {
+        todos: todoList.filter(function(o) {
+          var tasks;
+          if (o.tasks) {
+            tasks = o.tasks.filter(function(task) {
+              return task.text.match(regex);
+            });
+          }
+          return tasks.length;
+        })
+      };
+    },
+
+    /**
      * Create a new todo with a unique id
      *
      * @return {Object}

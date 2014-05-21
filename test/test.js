@@ -26,10 +26,12 @@ describe('Todo App', function() {
     it('should create a new task', function(done) {
       request
       .post('/todos/' + todoid + '/tasks')
+      .send({text: 'do something'})
       .expect(201)
       .expect('Location', /tasks/)
       .end(function(err, res) {
         res.body.should.have.property('taskid');
+        res.body.should.have.property('text', 'do something');
         taskid = res.body.taskid;
         done();
       });

@@ -83,10 +83,10 @@ var TodoApp = function() {
           var tasks;
           if (o.tasks) {
             tasks = o.tasks.filter(function(task) {
-              return task.text.match(regex);
+              return task.text && task.text.match(regex);
             });
+            return tasks.length;
           }
-          return tasks.length;
         })
       };
     },
@@ -99,7 +99,8 @@ var TodoApp = function() {
     createTodo: function() {
       var todoid = generateId();
       var output = {
-        todoid: todoid
+        todoid: todoid,
+        tasks: []
       };
       todoList.push(output);
       return output;

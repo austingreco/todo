@@ -1,0 +1,14 @@
+<div>
+  <form role="form">
+    <div class="form-group">
+      <label for="task-input">Add Task</label>
+      <input id="task-input" class="form-control" type="text" ng-model="newTaskText">
+    </div>
+    <button class="btn" type="submit" ng-click="addTask(newTaskText)">Add</button>
+  </form>
+  <ul>
+    <li ng-repeat="task in todo.tasks track by $index">
+      <input type="checkbox" ng-model="task.complete" ng-click="completeTask(task)"> {{task.text}} <button class="btn" type="button" ng-click="deleteTask(task)">Delete</button>
+    </li>
+  </ul>
+</div>

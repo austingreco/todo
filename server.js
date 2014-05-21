@@ -24,17 +24,7 @@ var config = {
 app.use(bodyParser());
 app.use(compress());
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-app.engine('.html', require('jade').__express);
-app.use('/public', express.static(__dirname + '/public'));
-app.use('/views', express.static(__dirname + '/views'));
-app.use(jade_browser('/public/templates.js', '**', {
-  minify: true,
-  maxAge: 1,
-  root: __dirname + '/views'
-}));
-
+app.use('/', express.static(__dirname + '/dist'));
 
 /**
  * Validation

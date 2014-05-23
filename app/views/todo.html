@@ -1,14 +1,24 @@
 <div>
-  <form role="form">
+  <h1>{{todo.title}}</h1>
+  <hr>
+  <form role="form" class="form-inline">
     <div class="form-group">
-      <label for="task-input">Add Task</label>
-      <input id="task-input" class="form-control" type="text" ng-model="newTaskText">
+      <input id="task-input" class="form-control" type="text" ng-model="newTaskText" placeholder="What to do?" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus="true">
     </div>
-    <button class="btn" type="submit" ng-click="addTask(newTaskText)">Add</button>
+    <div class="form-group">
+      <button class="btn btn-default" type="submit" ng-click="addTask(newTaskText)" ng-disabled="!newTaskText"><span class="glyphicon glyphicon-plus-sign"></span> Add Task</button>
+    </div>
+    <div class="form-group filter-group">
+      <ul class="task-filter">
+        <li ng-class="{'active': filterName == 'all'}"><a href ng-click="setTaskFilter('all')">All</a></li>
+        <li ng-class="{'active': filterName == 'active'}"><a href ng-click="setTaskFilter('active')">Active</a></li>
+        <li ng-class="{'active': filterName == 'done'}"><a href ng-click="setTaskFilter('done')">Done</a></li>
+      </ul>
+    </div>
   </form>
-  <ul>
-    <li ng-repeat="task in todo.tasks track by $index">
-      <input type="checkbox" ng-model="task.complete" ng-click="completeTask(task)"> {{task.text}} <button class="btn" type="button" ng-click="deleteTask(task)">Delete</button>
+  <ul class="task-list" ng-show="todo.tasks.length">
+    <li ng-repeat="task in todo.tasks | filter:taskFilter track by $index" ng-class="{'task-complete': task.complete}">
+      <input class="task-check glyphicon" type="checkbox" ng-model="task.complete" ng-click="completeTask(task)"> {{task.text}} <button class="btn btn-default task-rm" type="button" ng-click="deleteTask(task)"><span class="glyphicon glyphicon-trash"></span></button>
     </li>
   </ul>
 </div>

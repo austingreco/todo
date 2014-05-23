@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Todo</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -20,45 +20,31 @@
     <base href="/">
   </head>
   <body ng-app="todo" ng-controller="MainCtrl">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Todo App</a>
+        </div>
+
+        <form class="navbar-form navbar-right" role="search">
+          <div class="form-group">
+            <input class="form-control" type="text" ng-model="searchText" placeholder="Search..." autocomplete="off" autocapitalize="off" spellcheck="false" bs-typeahead ng-options="todo.todoid as todo.title for todo in search($viewValue)">
+          </div>
+        </form>
+      </div>
+    </nav>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
-    <!-- Add your site or application content here -->
     <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#">About</a></li>
-          <li><a ng-href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">temp</h3>
-      </div>
+      <div class="row marketing">
 
-      <div class="row">
-        <form class="form-inline" role="form">
-          <div class="input-group">
-            <input class="form-control" type="text" ng-model="searchText" placeholder="Search...">
-            <div class="input-group-btn" type="submit" ng-click="search(searchText)" ng-disabled="!searchText">
-              <button class="btn btn-info">
-                <span class="glyphicon glyphicon-search"></span>
-              </button>
-            </div>
-          </div>
-        </form>
-        <ul>
-          <li ng-repeat="result in searchResults.todos track by $index"><a ng-href="/{{result.todoid}}">{{result.todoid}}</a> ({{result.tasks.length}} tasks)</li>
-        </ul>
-        <hr>
-        <p>
-          <button class="btn" type="button" ng-click="createTodo()"><span class="glyphicon glyphicon-plus"></span> New Todo List</button>
-        </p>
 
         <div ng-view></div>
       </div>
 
       <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+        <p><span class="glyphicon glyphicon-heart"></span> from Austin</p>
       </div>
     </div>
 
@@ -74,6 +60,8 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

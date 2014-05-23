@@ -2,11 +2,16 @@
 
 angular.module('todo', [
   'ngResource',
-  'ngRoute'
+  'ngRoute',
+  'mgcrea.ngStrap'
 ])
 .config(function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
   $routeProvider
+    .when('/', {
+      templateUrl: 'views/main.html',
+      controller: 'TodoListCtrl'
+    })
     .when('/:todoid', {
       templateUrl: 'views/todo.html',
       controller: 'TodoCtrl'
@@ -15,17 +20,32 @@ angular.module('todo', [
       redirectTo: '/'
     });
 })
-.controller('MainCtrl', function($scope, $routeParams, TodoService, $location) {
+.controller('MainCtrl', function($scope, $routeParams, TodoService, $location, $http) {
+
+  $scope.$on('$typeahead.select', function(event, args) {
+    $location.url('/' + args);
+  });
+
   $scope.search = function(searchText) {
-    $scope.searchResults = TodoService.get({search: searchText});
+    var config = {
+      params: {
+        search: searchText
+      }
+    };
+    return $http.get('/todos', config).then(function(e) {
+      return e.data.todos;
+    });
   };
 
-  $scope.createTodo = function() {
-    TodoService.save({}, function(res) {
-      console.log('Created new todo', res.todoid);
+  $scope.createTodo = function(title) {
+    TodoService.save({title: title}, function(res) {
+      $scope.newTodoTitle = '';
       $location.url('/' + res.todoid);
     });
   };
+})
+.controller('TodoListCtrl', function($scope, TodoService) {
+  $scope.todos = TodoService.get();
 })
 .controller('TodoCtrl', function($scope, $routeParams, TaskService, TodoService) {
   $scope.todo = TodoService.get({todoid: $routeParams.todoid});
@@ -52,6 +72,16 @@ angular.module('todo', [
     TaskService.save({todoid: $routeParams.todoid, taskid: task.taskid}, {complete: !task.complete}, function(res) {
       task.complete = res.complete;
     });
+  };
+
+  $scope.filterName = 'all';
+  $scope.setTaskFilter = function(type) {
+    $scope.filterName = type;
+    var filter = {};
+    if (type === 'active' || type === 'done') {
+      filter = {complete: type === 'done'};
+    }
+    $scope.taskFilter = filter;
   };
 })
 .factory('TodoService', function($resource) {

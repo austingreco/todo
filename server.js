@@ -25,6 +25,7 @@ app.use(bodyParser());
 app.use(compress());
 
 app.use('/', express.static(__dirname + '/dist'));
+app.use('/[a-z0-9]{8}', express.static(__dirname + '/dist'));
 
 /**
  * Validation
@@ -39,7 +40,7 @@ function validateId(id) {
 }
 
 function validateText(text) {
-  if (text.length > 60) {
+  if (text.length > 20) {
     throw {
       status: 400,
       message: 'text is invalid'
@@ -77,7 +78,9 @@ app.get('/todos/:todoid', function(req, res) {
 });
 
 app.post('/todos', function(req, res) {
-  var todo = todoapp.createTodo();
+  validateText(req.body.title);
+
+  var todo = todoapp.createTodo(req.body.title);
   res.setHeader('Location', req.path + '/' + todo.todoid);
   res.json(201, todo);
 });

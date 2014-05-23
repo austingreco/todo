@@ -4,16 +4,32 @@ var TodoApp = function() {
   var todoList = [
     {
       todoid: 'ffffffff',
+      title: 'Sandwich List',
       tasks: [
         {
           taskid: 'fffffffe',
-          complete: false,
-          text: 'Make a test todo list'
+          complete: true,
+          text: 'Get bread'
         },
         {
           taskid: 'fffffffd',
           complete: true,
-          text: 'Make a sandwich'
+          text: 'Get meat'
+        },
+        {
+          taskid: 'fffffffd',
+          complete: true,
+          text: 'Get lettuce'
+        },
+        {
+          taskid: 'fffffffc',
+          complete: false,
+          text: 'Make Sandwich'
+        },
+        {
+          taskid: 'fffffffb',
+          complete: false,
+          text: 'Eat sandwich'
         }
       ]
     }
@@ -64,7 +80,7 @@ var TodoApp = function() {
 
       }
       return {
-        todos: todoList.map(function(o) { return o.todoid; })
+        todos: todoList//.map(function(o) { return o.todoid; })
       };
     },
 
@@ -81,12 +97,15 @@ var TodoApp = function() {
       return {
         todos: todoList.filter(function(o) {
           var tasks;
+          var taskMatch;
           if (o.tasks) {
             tasks = o.tasks.filter(function(task) {
               return task.text && task.text.match(regex);
             });
-            return tasks.length;
+            taskMatch = tasks.length;
           }
+          var titleMatch = o.title && o.title.match(regex);
+          return titleMatch || taskMatch;
         })
       };
     },
@@ -96,10 +115,11 @@ var TodoApp = function() {
      *
      * @return {Object}
      */
-    createTodo: function() {
+    createTodo: function(title) {
       var todoid = generateId();
       var output = {
         todoid: todoid,
+        title: title,
         tasks: []
       };
       todoList.push(output);

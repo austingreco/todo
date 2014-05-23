@@ -16,6 +16,7 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
 
   var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+  var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -71,6 +72,9 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      rules: [
+        {from: '^/[a-f0-9]{8}$', to: '/index.html'}
+      ],
       proxies: [
         {
           context: '/todos',
@@ -88,6 +92,7 @@ module.exports = function (grunt) {
           middleware: function(connect) {
             return [
               proxySnippet,
+              rewriteRulesSnippet,
               connect.static(require('path').resolve('app')),
               connect.static(require('path').resolve('.tmp'))
             ];
@@ -212,7 +217,7 @@ module.exports = function (grunt) {
     // The following *-min tasks produce minified files in the dist folder
     cssmin: {
       options: {
-        root: '<%= yeoman.app %>'
+//        root: '<%= yeoman.app %>'
       }
     },
 
@@ -369,6 +374,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'configureProxies',
+      'configureRewriteRules',
       'connect:livereload',
       'watch'
     ]);

@@ -43,7 +43,9 @@
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
-    "grunt-connect-proxy": "^0.1.10"
+    "grunt-connect-proxy": "^0.1.10",
+    "grunt-connect-rewrite": "^0.2.1",
+    "grunt-contrib-jade": "^0.11.0"
   },
   "scripts": {
     "test": "node_modules/mocha/bin/mocha"

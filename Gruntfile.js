@@ -73,7 +73,7 @@ module.exports = function (grunt) {
         livereload: 35729
       },
       rules: [
-        {from: '^/[a-f0-9]{8}$', to: '/index.html'}
+        {from: '^/[a-f0-9]{8}$', to: '/'}
       ],
       proxies: [
         {

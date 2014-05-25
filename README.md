@@ -101,8 +101,10 @@ Delete task with id {taskID}. Returns `204` on success.
 Run app
 
 ```
-npm install && npm start
+npm start
 ```
+
+This will start the server on port `3000`.
 
 #### Run tests
 
@@ -115,8 +117,10 @@ npm install && npm start
 To run the tests:
 
 ```
-grunt test
+npm test
 ```
+
+This will install all dependencies and run the grunt test task.
 
 #### Development
 

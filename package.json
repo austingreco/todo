@@ -5,8 +5,6 @@
   "author": "Austin Greco",
   "dependencies": {
     "express": "*",
-    "jade": "*",
-    "jade-browser": "*",
     "body-parser": "*",
     "compression": "^1.0.2"
   },
@@ -49,9 +47,12 @@
     "protractor": "~0.20.1",
     "grunt-protractor-runner": "^1.0.0"
   },
+  "resolutions": {
+    "bootstrap": "~3.1.0"
+  },
   "scripts": {
     "postinstall": "bower install",
-    "prestart": "npm install",
+    "prestart": "npm install && grunt build",
     "pretest": "npm run update-webdriver",
     "test": "grunt test",
     "preupdate-webdriver": "npm install",

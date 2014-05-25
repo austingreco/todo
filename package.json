@@ -38,7 +38,6 @@
     "jshint-stylish": "~0.1.3",
     "load-grunt-tasks": "~0.4.0",
     "time-grunt": "~0.2.1",
-    "karma-ng-scenario": "^0.1.0",
     "grunt-karma": "^0.8.3",
     "karma": "^0.12.16",
     "karma-ng-html2js-preprocessor": "^0.1.0",
@@ -46,7 +45,6 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "grunt-connect-proxy": "^0.1.10",
     "grunt-connect-rewrite": "^0.2.1",
-    "grunt-contrib-jade": "^0.11.0",
     "grunt-mocha-test": "^0.10.2",
     "protractor": "~0.20.1",
     "grunt-protractor-runner": "^1.0.0"

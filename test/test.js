@@ -4,7 +4,7 @@ var should = require('should');
 var request = require('supertest');
 var app = require('../server').app;
 
-describe('Todo App', function() {
+describe('Todo App REST API', function() {
   request = request('http://localhost:3000');
 
   describe('Todos', function() {
@@ -14,11 +14,23 @@ describe('Todo App', function() {
     it('should create a new todo', function(done) {
       request
       .post('/todos')
+      .send({title: 'Test title'})
       .expect(201)
       .expect('Location', /todos/)
       .end(function(err, res) {
         res.body.should.have.property('todoid');
+        res.body.should.have.property('title', 'Test title');
         todoid = res.body.todoid;
+        done();
+      });
+    });
+
+    it('should get all todos', function(done) {
+      request
+      .get('/todos')
+      .expect(200)
+      .end(function(err, res) {
+        res.body.should.have.property('todos');
         done();
       });
     });
@@ -51,7 +63,7 @@ describe('Todo App', function() {
     it('should not allow text which is too long', function(done) {
       request
       .post('/todos/' + todoid + '/tasks/' + taskid)
-      .send({text: 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'})
+      .send({text: 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'})
       .expect(400)
       .end(function(err, res) {
         done();
@@ -87,6 +99,41 @@ describe('Todo App', function() {
       .expect(200)
       .end(function(err, res) {
         res.body.should.have.property('complete', false);
+        done();
+      });
+    });
+
+    it('should search todos by title', function(done) {
+      request
+      .get('/todos')
+      .query({search: 'Test'})
+      .expect(200)
+      .end(function(err, res) {
+        res.body.should.have.property('todos').with.length(1);
+        res.body.todos[0].should.have.property('title', 'Test title');
+        done();
+      });
+    });
+
+    it('should search todos for task by text', function(done) {
+      request
+      .get('/todos')
+      .query({search: 'updated'})
+      .expect(200)
+      .end(function(err, res) {
+        res.body.should.have.property('todos').with.length(1);
+        res.body.todos[0].should.have.property('title', 'Test title');
+        done();
+      });
+    });
+
+    it('should have empty search results', function(done) {
+      request
+      .get('/todos')
+      .query({search: 'zyzyzyzy'})
+      .expect(200)
+      .end(function(err, res) {
+        res.body.should.have.property('todos').with.length(0);
         done();
       });
     });

@@ -1,24 +1,33 @@
 <div>
-  <h1>{{todo.title}}</h1>
+  <h1 ng-bind="todo.title"></h1>
   <hr>
   <form role="form" class="form-inline">
     <div class="form-group">
-      <input id="task-input" class="form-control" type="text" ng-model="newTaskText" placeholder="What to do?" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus="true">
+      <input id="task-input" class="form-control" type="text" ng-model="newTaskText" placeholder="What to do?" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" todo-focus>
     </div>
     <div class="form-group">
       <button class="btn btn-default" type="submit" ng-click="addTask(newTaskText)" ng-disabled="!newTaskText"><span class="glyphicon glyphicon-plus-sign"></span> Add Task</button>
     </div>
     <div class="form-group filter-group">
       <ul class="task-filter">
-        <li ng-class="{'active': filterName == 'all'}"><a href ng-click="setTaskFilter('all')">All</a></li>
-        <li ng-class="{'active': filterName == 'active'}"><a href ng-click="setTaskFilter('active')">Active</a></li>
-        <li ng-class="{'active': filterName == 'done'}"><a href ng-click="setTaskFilter('done')">Done</a></li>
+        <li ng-class="{'active': filterName == 'all'}"><a href="javascript:" ng-click="setTaskFilter('all')">All</a></li>
+        <li ng-class="{'active': filterName == 'active'}"><a href="javascript:" ng-click="setTaskFilter('active')">Active</a></li>
+        <li ng-class="{'active': filterName == 'done'}"><a href="javascript:" ng-click="setTaskFilter('done')">Done</a></li>
       </ul>
     </div>
   </form>
   <ul class="task-list" ng-show="todo.tasks.length">
     <li ng-repeat="task in todo.tasks | filter:taskFilter track by $index" ng-class="{'task-complete': task.complete}">
-      <input class="task-check glyphicon" type="checkbox" ng-model="task.complete" ng-click="completeTask(task)"> {{task.text}} <button class="btn btn-default task-rm" type="button" ng-click="deleteTask(task)"><span class="glyphicon glyphicon-trash"></span></button>
+      <input class="task-check glyphicon" type="checkbox" ng-model="task.complete" ng-click="completeTask(task)">
+      <span class="task-text">
+        <span ng-click="editTask(task)">{{task.text}}</span>
+        <span ng-if="task.editing" class="edit-task">
+          <form ng-submit="saveEdit(task)">
+            <input type="text" ng-model="task.text" autocomplete="off" autocapitalize="off" spellcheck="false" todo-focus ng-blur="saveEdit(task)">
+          </form>
+        </span>
+      </span>
+      <button class="btn btn-default task-rm" type="button" ng-click="deleteTask(task)"><span class="glyphicon glyphicon-trash"></span></button>
     </li>
   </ul>
 </div>

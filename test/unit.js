@@ -1,7 +1,7 @@
 var should = require('should');
 var todoapp = require('../todoapp')();
 
-describe('Todo App', function() {
+describe('Todo App Unit Tests', function() {
 
   describe('Todos', function() {
     var todoid;

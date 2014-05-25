@@ -356,8 +356,26 @@ module.exports = function (grunt) {
     // Test settings
     karma: {
       unit: {
-        configFile: 'karma.conf.js',
+        configFile: 'test/karma.conf.js',
         singleRun: true
+      }
+    },
+
+    // server side tests
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['test/*.js']
+      }
+    },
+
+    protractor: {
+      test: {
+        configFile: 'test/protractor-conf.js',
+        keepAlive: true,
+        noColor: false
       }
     }
   });
@@ -386,11 +404,13 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [
+    'mochaTest',
     'clean:server',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    'karma',
+    'protractor'
   ]);
 
   grunt.registerTask('build', [

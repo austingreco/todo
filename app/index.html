@@ -24,13 +24,12 @@
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Todo App</a>
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group">
+              <input class="form-control" type="text" ng-model="searchText" placeholder="Search..." autocomplete="off" autocapitalize="off" spellcheck="false" bs-typeahead template="views/search-tpl.html" ng-options="todo as todo for todo in search($viewValue)">
+            </div>
+          </form>
         </div>
-
-        <form class="navbar-form navbar-right" role="search">
-          <div class="form-group">
-            <input class="form-control" type="text" ng-model="searchText" placeholder="Search..." autocomplete="off" autocapitalize="off" spellcheck="false" bs-typeahead ng-options="todo.todoid as todo.title for todo in search($viewValue)">
-          </div>
-        </form>
       </div>
     </nav>
     <!--[if lt IE 7]>
@@ -67,6 +66,9 @@
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/controllers.js"></script>
+    <script src="scripts/services.js"></script>
+    <script src="scripts/directives.js"></script>
     <!-- endbuild -->
   </body>
 </html>

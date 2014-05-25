@@ -12,7 +12,29 @@ Get all todos
 
 ```
 {
-  "todos": []
+  "todos": [
+    {
+      "todoid": "f94ff6f9",
+      "title": "Some Title",
+      "tasks": []
+    }
+  ]
+}
+```
+
+#### `GET /todos?search=str`
+
+Search todos & tasks by some string. Will match titles of todos and text of tasks and return 
+
+```
+{
+  "todos": [
+    {
+      "todoid": "f94ff6f9",
+      "title": "Some Title",
+      "tasks": []
+    }
+  ]
 }
 ```
 
@@ -20,9 +42,16 @@ Get all todos
 
 Create a new todo with a unique id
 
+Request body:
+```
+{
+  "title": "Some Title"
+}
+```
+
 #### `DELETE /todos/{todoID}`
 
-Delete todo with id `{todoID}`
+Delete todo with id `{todoID}`. Returns `204` on success.
 
 ### Tasks
 
@@ -32,7 +61,9 @@ Create a new task with a unique id and add it to the todo list `{todoID}`
 
 #### `POST /todos/{todoID}/tasks/{taskID}`
 
-Update a task's text or mark a task complete/not complete.
+Update a task's text or mark a task complete/not complete. 
+
+*POST was used because it's a partial update, and didn't want to mess with JSON PATCH diffs.*
 
 ##### Parameters
 
@@ -63,7 +94,7 @@ JSON request body
 
 #### `DELETE /todos/{todoID}/tasks/{taskID}`
 
-Delete task with id {taskID}
+Delete task with id {taskID}. Returns `204` on success.
 
 ## Usage
 
@@ -73,8 +104,40 @@ Run app
 npm install && npm start
 ```
 
-Run tests
+#### Run tests
+
+3 types of tests are done:
+
+* Mocha
+* Karma - client side unit tests
+* Protractor - client side end-to-end tests
+
+To run the tests:
 
 ```
-npm install && npm test
+grunt test
 ```
+
+#### Development
+
+Start the server as above `npm start`, then:
+
+```
+grunt serve
+```
+
+Loads the app in a browser window with livereload. Requests are proxied to the local server on port 3000.
+
+#### Build for prod
+
+```
+grunt build
+```
+
+Builds angular app into production ready format:
+
+* Concat scripts and css
+* Add hash to filenames for caching
+
+It places the build files into `dist/` for use by the node server.
+

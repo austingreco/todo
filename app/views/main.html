@@ -1,17 +1,22 @@
 <div>
+  <h1>All Todos</h1>
+  <hr>
   <form role="form" class="form-inline">
     <div class="form-group">
-      <input id="task-input" class="form-control" type="text" ng-model="newTodoTitle" placeholder="Name your todo list" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <input id="task-input" class="form-control" type="text" ng-model="newTodoTitle" placeholder="Name your todo list" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" todo-focus>
     </div>
     <div class="form-group">
       <button class="btn btn-default" type="submit" ng-click="createTodo(newTodoTitle)" ng-disabled="!newTodoTitle"><span class="glyphicon glyphicon-plus"></span> New Todo</button>
     </div>
   </form>
-  <h1>All Todos</h1>
-  <hr>
-  <ul class="todo-list" ng-show="todos.todos.length">
-    <li ng-repeat="todo in todos.todos track by $index">
-      <span class="todo-icon glyphicon glyphicon-th-list"></span> <a ng-href="/{{todo.todoid}}">{{todo.title}}<a>
+  <ul class="todo-list" ng-show="todos.length">
+    <li ng-repeat="todo in todos track by $index">
+      <span class="todo-icon glyphicon glyphicon-th-list"></span>
+      <span>
+        <h3><a ng-href="/{{todo.todoid}}">{{todo.title}}</a></h3>
+        <small>{{todo.tasks.length}} tasks</small>
+      </span>
+      <button class="btn btn-default task-rm" type="button" ng-click="deleteTodo(todo)"><span class="glyphicon glyphicon-trash"></span></button>
     </li>
   </ul>
 </div>

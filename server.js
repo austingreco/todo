@@ -3,10 +3,8 @@
  */
 var express = require('express');
 var app = express();
-var jade_browser = require('jade-browser');
 var bodyParser = require('body-parser');
 var compress = require('compression');
-var crypto = require('crypto');
 var todoapp = require('./todoapp')();
 
 

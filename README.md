@@ -149,7 +149,8 @@ It places the build files into `dist/` for use by the node server.
 
 ## Other Notes
 
-The angular unit tests are not complete, but show most of the functionality.
-The app is deployed fully on ec2 at:
+The list is prepopulated with 1 todo list with 5 tasks. Some of the unit tests take this in to account.
 
-http://todo.austingreco.com
+The angular unit tests are not complete, but show most of the functionality.
+
+The app is deployed fully on ec2 at: http://todo.austingreco.com

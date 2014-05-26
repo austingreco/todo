@@ -98,6 +98,8 @@ Delete task with id {taskID}. Returns `204` on success.
 
 ## Usage
 
+*Grunt is required (`npm install -g grunt-cli`) before running any tasks*
+
 Run app
 
 ```
@@ -114,7 +116,7 @@ This will start the server on port `3000`.
 * Karma - client side unit tests
 * Protractor - client side end-to-end tests
 
-To run the tests:
+To run the tests
 
 ```
 npm test
@@ -145,3 +147,9 @@ Builds angular app into production ready format:
 
 It places the build files into `dist/` for use by the node server.
 
+## Other Notes
+
+The angular unit tests are not complete, but show most of the functionality.
+The app is deployed fully on ec2 at:
+
+http://todo.austingreco.com

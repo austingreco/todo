@@ -17,7 +17,7 @@
     </div>
   </form>
   <ul class="task-list" ng-show="todo.tasks.length">
-    <li ng-repeat="task in todo.tasks | filter:taskFilter track by $index" ng-class="{'task-complete': task.complete}">
+    <li ng-repeat="task in todo.tasks | filter:taskFilter track by $index" ng-class="{'task-complete': task.complete}" class="repeat-item">
       <input class="task-check glyphicon" type="checkbox" ng-model="task.complete" ng-click="completeTask(task)">
       <span class="task-text">
         <span ng-click="editTask(task)">{{task.text}}</span>

@@ -3,6 +3,7 @@
 angular.module('todo', [
   'ngResource',
   'ngRoute',
+  'ngAnimate',
   'mgcrea.ngStrap'
 ])
 .config(function ($routeProvider, $locationProvider) {

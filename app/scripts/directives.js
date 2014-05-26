@@ -6,7 +6,7 @@ angular.module('todo')
     restrict: 'A',
     link: function(scope, el) {
       $timeout(function() {
-        el.focus();
+        el[0].focus();
       }, 50);
     }
   };

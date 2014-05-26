@@ -45,6 +45,10 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },
+      stylus: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.styl'],
+        tasks: ['stylus:server', 'autoprefixer']
+      },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
@@ -116,6 +120,33 @@ module.exports = function (grunt) {
       }
     },
 
+    stylus: {
+      test: {
+        options: {
+          compress: false
+        },
+        files: {
+          '.tmp/styles/main.css': ['<%= yeoman.app %>/styles/{,*/}*.styl']
+        }
+      },
+      server: {
+        options: {
+          compress: false
+        },
+        files: {
+          '.tmp/styles/main.css': ['<%= yeoman.app %>/styles/{,*/}*.styl']
+        }
+      },
+      dist: {
+        options: {
+          compress: true
+        },
+        files: {
+          '.tmp/styles/main.css': ['<%= yeoman.app %>/styles/{,*/}*.styl']
+        }
+      }
+    },
+
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
@@ -168,6 +199,10 @@ module.exports = function (grunt) {
     bowerInstall: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
+        exclude: [
+          /bootstrap\.js/,
+          'jquery'
+        ],
         ignorePath: '<%= yeoman.app %>/'
       }
     },
@@ -315,13 +350,15 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'copy:styles'
+        'stylus:server'
+//        'copy:styles'
       ],
       test: [
+        'stylus:test',
         'copy:styles'
       ],
       dist: [
-        'copy:styles',
+//        'copy:styles',
         'imagemin',
         'svgmin'
       ]
@@ -417,6 +454,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'bowerInstall',
     'useminPrepare',
+    'stylus:dist',
     'concurrent:dist',
     'autoprefixer',
     'concat',

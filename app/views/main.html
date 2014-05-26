@@ -10,7 +10,7 @@
     </div>
   </form>
   <ul class="todo-list" ng-show="todos.length">
-    <li ng-repeat="todo in todos track by $index">
+    <li ng-repeat="todo in todos track by $index" class="repeat-item">
       <span class="todo-icon glyphicon glyphicon-th-list"></span>
       <span>
         <h3><a ng-href="/{{todo.todoid}}">{{todo.title}}</a></h3>
